@@ -1,0 +1,240 @@
+React (with Vite)
+✅ TypeScript
+✅ @solana/wallet-adapter (supports Phantom, etc.)
+✅ @coral-xyz/anchor (Anchor client for your IDL)
+✅ SPL token interactions
+
+Important: Anchor’s TypeScript integration currently uses @coral-xyz/anchor, which is compatible with Solana Web3-JS v1.x clients. 
+Anchor Lang
+
+📌 1. Project Setup
+Install (with npm or pnpm)
+npm create vite@latest solana-dacit-ui --template react-ts
+cd solana-dacit-ui
+
+npm install @solana/web3.js @solana/wallet-adapter-base @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-wallets @coral-xyz/anchor
+
+
+Also install some UI dependencies:
+
+npm install @solana/wallet-adapter-react-ui @solana/wallet-adapter-phantom
+
+📌 2. Create Wallet Provider
+
+This will let users connect wallets like Phantom.
+
+src/WalletProvider.tsx
+import React, { FC, ReactNode, useMemo } from "react";
+import {
+    ConnectionProvider,
+    WalletProvider,
+} from "@solana/wallet-adapter-react";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import {
+    PhantomWalletAdapter,
+    SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+
+import "@solana/wallet-adapter-react-ui/styles.css";
+
+export const SolanaWalletProvider: FC<{ children: ReactNode }> = ({
+    children,
+}) => {
+    const network = WalletAdapterNetwork.Devnet;
+
+    const endpoint = useMemo(() => "https://api.devnet.solana.com", []);
+
+    const wallets = useMemo(
+        () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
+        []
+    );
+
+    return (
+        <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets}>
+                <WalletModalProvider>{children}</WalletModalProvider>
+            </WalletProvider>
+        </ConnectionProvider>
+    );
+};
+
+📌 3. Load Anchor Program & IDL
+
+Create a utility to load your Anchor Program using your deployed program’s IDL.
+
+src/utils/anchor.ts
+import * as anchor from "@coral-xyz/anchor";
+import idl from "./idl/dacit_program.json"; // copy your IDL here
+
+const programID = new anchor.web3.PublicKey(idl.metadata.address);
+
+export const getProvider = (wallet: any) => {
+    const connection = new anchor.web3.Connection(
+        "https://api.devnet.solana.com",
+        "confirmed"
+    );
+    const provider = new anchor.AnchorProvider(connection, wallet, {});
+    anchor.setProvider(provider);
+    return provider;
+};
+
+export const getProgram = (wallet: any) => {
+    const provider = getProvider(wallet);
+    return new anchor.Program(idl as any, programID, provider);
+};
+
+📌 4. Main App Component
+
+This UI shows:
+
+✔ Wallet connect
+✔ Stake tokens
+✔ Unstake and claim rewards
+
+src/App.tsx
+import React, { useCallback, useState } from "react";
+import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
+import { getProgram } from "./utils/anchor";
+
+import "./App.css";
+
+function App() {
+    const { connection } = useConnection();
+    const wallet = useAnchorWallet();
+
+    const [stakeAmount, setStakeAmount] = useState<number>(0);
+
+    const handleStake = useCallback(async () => {
+        if (!wallet) return alert("Connect wallet first!");
+        const program = getProgram(wallet);
+
+        try {
+            const tx = await program.methods
+                .stakeTokens(new anchor.BN(stakeAmount))
+                .accounts({
+                    // ensure your accounts match your Anchor program
+                    stakeState: new PublicKey(/* PDA addr */),
+                    user: wallet.publicKey,
+                    userAta: /* user's SPL token ATA */,
+                    stakeVault: /* program’s vault */,
+                    mint: /* your DACIT mint */,
+                })
+                .rpc();
+            console.log("Stake TX:", tx);
+        } catch (err) {
+            console.error("Stake failed:", err);
+        }
+    }, [wallet, stakeAmount]);
+
+    const handleUnstake = useCallback(async () => {
+        if (!wallet) return alert("Connect wallet first!");
+        const program = getProgram(wallet);
+
+        try {
+            const tx = await program.methods
+                .unstakeTokens()
+                .accounts({
+                    stakeState: new PublicKey(/* PDA addr */),
+                    user: wallet.publicKey,
+                    stakeVault: /* program’s vault */,
+                    userAta: /* user’s ATA */,
+                    mint: /* your DACIT mint */,
+                })
+                .rpc();
+            console.log("Unstake TX:", tx);
+        } catch (err) {
+            console.error("Unstake failed:", err);
+        }
+    }, [wallet]);
+
+    return (
+        <div className="App">
+            <h1>🚀 DACIT Frontend</h1>
+            {!wallet ? (
+                <p>Connect your wallet to participate</p>
+            ) : (
+                <>
+                    <div>
+                        <input
+                            type="number"
+                            value={stakeAmount}
+                            onChange={(e) => setStakeAmount(Number(e.target.value))}
+                            placeholder="Amount to stake"
+                        />
+                        <button onClick={handleStake}>Stake Tokens</button>
+                    </div>
+                    <button onClick={handleUnstake}>Unstake & Claim Rewards</button>
+                </>
+            )}
+        </div>
+    );
+}
+
+export default App;
+
+📌 5. Wrap with Wallet Provider
+
+Edit src/main.tsx:
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { SolanaWalletProvider } from "./WalletProvider";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+    <SolanaWalletProvider>
+        <App />
+    </SolanaWalletProvider>
+);
+
+⚡ Key Concepts & Integration Tips
+💡 Anchor Client via IDL
+
+Anchor auto-generates an IDL (JSON) for your program at build time.
+
+The client uses Program.methods.<instruction>() to construct transactions automatically, based on your program’s IDL. 
+Anchor Lang
+
+🔑 Wallet Integration
+
+Use @solana/wallet-adapter-react to handle wallet connections smoothly.
+
+Phantom and other wallets are supported.
+
+Keep the Anchor provider linked to the wallet instance for signing transactions. 
+Anchor Lang
+
+📊 Handling SPL Tokens
+
+Before calling stake/unstake, you must ensure:
+
+The user has an associated token account (ATA) for your token.
+
+The program’s vault ATA exists and is owned/controlled properly.
+
+You can use @solana/web3.js or @solana/spl-token helpers to manage token accounts (create, fetch, balance query). 
+Quicknode
+
+🧠 What This Frontend Enables
+
+With this template you can:
+
+✅ Connect a wallet
+✅ Call your Solana/Anchor staking program
+✅ Submit instructions for
+
+✔ Staking DACIT tokens (lock for rewards)
+✔ Unstaking and claiming rewards
+✔ Building additional features (claim history, dashboards)
+
+🧩 Extending This UI
+
+You can expand this frontend with:
+
+🔹 Leaderboard of top contributors
+🔹 Real-time reward API
+🔹 Conversion analytics dashboards
+🔹 Node management panels
+🔹 Token purchase & marketplace features
