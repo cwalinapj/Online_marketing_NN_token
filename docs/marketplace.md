@@ -128,14 +128,15 @@ Pay-per-click campaign management.
          │ 6. Buyer Confirms / Auto-Release
          │
          ▼
-┌─────────────────┐
-│                 │
-│  Settlement:    │
-│  - 93-96% Provider (based on tier) │
-│  - 2-5% Platform (based on tier)   │
-│  - 2% Burn      │
-│                 │
-└─────────────────┘
+┌───────────────────────────────┐
+│                               │
+│  Settlement (see Fee         │
+│  Structure table):           │
+│  - Provider receives net %   │
+│  - Platform fee to Treasury  │
+│  - 2% token burn             │
+│                               │
+└───────────────────────────────┘
 ```
 
 ## Provider Onboarding
@@ -184,40 +185,67 @@ All payments are held in escrow until service delivery is confirmed:
 
 ### Smart Contract Interface
 ```rust
-// Anchor program for marketplace transactions
+//! Anchor program for DACIT marketplace transactions.
+//! Handles service listings, order management, and escrow settlement.
 use anchor_lang::prelude::*;
 
+/// ServiceListing represents a service offered by a verified provider.
+/// Each listing contains pricing, metadata, and performance statistics.
 #[account]
 pub struct ServiceListing {
-    pub provider: Pubkey,        // Service provider wallet
-    pub service_type: u8,        // Category identifier
-    pub price: u64,              // Price in DACIT tokens
-    pub description_hash: [u8; 32], // IPFS hash for details
-    pub active: bool,            // Listing status
-    pub rating_sum: u64,         // Total rating points
-    pub rating_count: u32,       // Number of ratings
-    pub completed_orders: u32,   // Successful deliveries
+    /// Wallet address of the service provider
+    pub provider: Pubkey,
+    /// Category identifier (0=SERP, 1=SEO Audit, 2=Keywords, etc.)
+    pub service_type: u8,
+    /// Price in DACIT tokens (lamports equivalent)
+    pub price: u64,
+    /// IPFS content hash for detailed service description
+    pub description_hash: [u8; 32],
+    /// Whether the listing is currently accepting orders
+    pub active: bool,
+    /// Cumulative rating points from completed orders
+    pub rating_sum: u64,
+    /// Total number of ratings received
+    pub rating_count: u32,
+    /// Number of successfully completed orders
+    pub completed_orders: u32,
 }
 
+/// Order represents a transaction between buyer and provider.
+/// Tokens are held in escrow until service completion or dispute resolution.
 #[account]
 pub struct Order {
-    pub buyer: Pubkey,           // Buyer wallet
-    pub provider: Pubkey,        // Provider wallet
-    pub listing: Pubkey,         // Service listing reference
-    pub amount: u64,             // Escrowed amount
-    pub status: OrderStatus,     // Current order status
-    pub created_at: i64,         // Order timestamp
-    pub completed_at: Option<i64>, // Completion timestamp
+    /// Wallet address of the buyer
+    pub buyer: Pubkey,
+    /// Wallet address of the service provider
+    pub provider: Pubkey,
+    /// Reference to the ServiceListing being purchased
+    pub listing: Pubkey,
+    /// Amount of DACIT tokens held in escrow
+    pub amount: u64,
+    /// Current status of the order
+    pub status: OrderStatus,
+    /// Unix timestamp when order was created
+    pub created_at: i64,
+    /// Unix timestamp when order was completed (if applicable)
+    pub completed_at: Option<i64>,
 }
 
+/// OrderStatus tracks the lifecycle of a marketplace order.
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq)]
 pub enum OrderStatus {
-    Pending,      // Awaiting provider acceptance
-    InProgress,   // Service being delivered
-    Delivered,    // Provider marked complete
-    Completed,    // Buyer confirmed, funds released
-    Disputed,     // Under arbitration
-    Refunded,     // Order cancelled, refund issued
+    /// Order created, awaiting provider acceptance
+    Pending,
+    /// Provider accepted, service being delivered
+    InProgress,
+    /// Provider marked service as complete, awaiting buyer confirmation
+    Delivered,
+    /// Buyer confirmed delivery, funds released to provider
+    Completed,
+    /// Order under arbitration due to dispute
+    Disputed,
+    /// Order cancelled, funds returned to buyer
+    Refunded,
 }
 ```
 

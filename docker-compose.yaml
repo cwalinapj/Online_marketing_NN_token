@@ -19,7 +19,6 @@ services:
       - variant-b
       - variant-c
       - decision-engine
-      - marketplace
     networks:
       - dacit-network
     restart: unless-stopped
@@ -45,6 +44,7 @@ services:
 
   # Services Marketplace - 3rd party SEO/marketing services marketplace
   # Note: Requires ./marketplace directory with Dockerfile to be implemented
+  # This service is optional until marketplace implementation is complete
   marketplace:
     build:
       context: ./marketplace
@@ -54,7 +54,7 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgres://dacit:dacit@postgres:5432/marketplace
+      - DATABASE_URL=postgres://${POSTGRES_USER:-dacit}:${POSTGRES_PASSWORD:-dacit}@postgres:5432/${POSTGRES_DB:-marketplace}
       - REDIS_URL=redis://redis:6379
       - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.devnet.solana.com}
       - MARKETPLACE_PROGRAM_ID=${MARKETPLACE_PROGRAM_ID}
@@ -67,22 +67,27 @@ services:
     networks:
       - dacit-network
     restart: unless-stopped
+    profiles:
+      - marketplace
 
   # PostgreSQL - Database for marketplace data
+  # Note: For production, use Docker secrets or external secret management
   postgres:
     image: postgres:15-alpine
     container_name: dacit-postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: dacit
-      POSTGRES_PASSWORD: dacit
-      POSTGRES_DB: marketplace
+      POSTGRES_USER: ${POSTGRES_USER:-dacit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dacit}
+      POSTGRES_DB: ${POSTGRES_DB:-marketplace}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - dacit-network
     restart: unless-stopped
+    profiles:
+      - marketplace
 
   # Landing Page Variant A
   variant-a:
