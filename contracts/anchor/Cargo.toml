@@ -1,0 +1,13 @@
+[package]
+name = "dacit_program"
+version = "0.1.0"
+edition = "2021"
+description = "DACIT Token - Staking and Reward Program"
+
+[dependencies]
+anchor-lang = { version = "0.30.2", features = ["init-if-needed"] }
+anchor-spl = "0.30.2"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "dacit_program"

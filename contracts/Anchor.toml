@@ -1,0 +1,14 @@
+[workspace]
+members = [
+  "contracts/anchor"
+]
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[programs.localnet]
+dacit_program = "DACITProg11111111111111111111111111111111111"
+
+[scripts]
+test = "anchor test"
