@@ -1,3 +1,5 @@
+# Why Real-Time Optimization Beats A/B Testing
+
 1) Why Traditional A/B Testing Isn’t Enough for Real-Time Optimization
 
 Traditional A/B testing splits traffic between two or more variants (A vs B) and waits until enough data is collected before picking a winner. It’s useful for high-level decisions but too slow and rigid for real-time optimization. 

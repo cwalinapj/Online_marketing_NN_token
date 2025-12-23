@@ -1,3 +1,5 @@
+# UI Dashboard Ideas
+
 Below are dashboard design ideas + UI components that match modern crypto/DePIN/analytics admin panels and can be adapted for your Solana/Anchor project:
 🔹 Wallet & token balances
 🔹 Staking-rewards panels

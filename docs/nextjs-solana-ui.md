@@ -1,3 +1,5 @@
+# Next.js + Solana UI Template
+
 Next.js + Tailwind + Solana UI (DACIT)
 
 This template gives you:

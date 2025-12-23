@@ -1,3 +1,5 @@
+# Anchor Full Project: Token, Staking & Rewards
+
 🚀 Anchor Full Project — Token + Staking + Reward Logic
 
 This project covers:
