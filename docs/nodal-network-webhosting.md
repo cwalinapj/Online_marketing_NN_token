@@ -212,6 +212,27 @@ class SerpNode:
             )
         return location
     
+    def derive_zip_code(self):
+        """
+        Extract zip code from location string.
+        Expects location to be in format like "90210" or "New York, NY 10001"
+        """
+        import re
+        # Extract 5-digit zip code pattern
+        match = re.search(r'\b\d{5}\b', str(self.location))
+        return match.group(0) if match else None
+    
+    def anonymized_location(self):
+        """
+        Return anonymized location that protects node operator privacy.
+        Only returns city/region level information, never precise coordinates.
+        """
+        # If location is a zip code, return just the first 3 digits for broader region
+        if self.zip_code:
+            return f"Region-{self.zip_code[:3]}"
+        # Otherwise return a generic city-level identifier
+        return f"City-{hash(str(self.location)) % 10000}"
+    
     def execute_serp_query(self, keyword, search_engine='google'):
         """
         Execute a search query from this node's location.
