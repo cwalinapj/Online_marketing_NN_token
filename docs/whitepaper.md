@@ -184,12 +184,14 @@ Privacy compliance through edge preprocessing and anonymization
 These measures build confidence and accelerate adoption.
 
 10. Roadmap
-Quarter	Milestone
-Q1 2026	Protocol specification & token launch
-Q2 2026	Testnet deployment & reward algorithm release
-Q3 2026	Public testnet with live optimization models
-Q4 2026	Mainnet & governance launch
-2027	Marketplace rollout & AI model exchange
+
+| Quarter | Milestone |
+|---------|-----------|
+| Q1 2026 | Protocol specification & token launch |
+| Q2 2026 | Testnet deployment & reward algorithm release |
+| Q3 2026 | Public testnet with live optimization models |
+| Q4 2026 | Mainnet & governance launch |
+| 2027    | Marketplace rollout & AI model exchange |
 11. Conclusion
 
 DACIT is not just another token — it’s the economic backbone of a new class of autonomous digital infrastructure that:
