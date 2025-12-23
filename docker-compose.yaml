@@ -1,6 +1,6 @@
 # DACIT Container Orchestration Configuration
 # This docker-compose.yaml deploys the conversion optimization system
-# with multiple landing page variants and the decision engine router.
+# with multiple landing page variants, the decision engine router, and the services marketplace.
 
 version: "3.9"
 
@@ -41,6 +41,57 @@ services:
     networks:
       - dacit-network
     restart: unless-stopped
+
+  # Services Marketplace - 3rd party SEO/marketing services marketplace
+  # Note: Requires ./marketplace directory with Dockerfile to be implemented
+  # This service is optional until marketplace implementation is complete
+  marketplace:
+    build:
+      context: ./marketplace
+      dockerfile: Dockerfile
+    container_name: dacit-marketplace
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://${POSTGRES_USER:-dacit}:${POSTGRES_PASSWORD:-dacit}@postgres:5432/${POSTGRES_DB:-marketplace}
+      - REDIS_URL=redis://redis:6379
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.devnet.solana.com}
+      - MARKETPLACE_PROGRAM_ID=${MARKETPLACE_PROGRAM_ID}
+      - ESCROW_WALLET=${ESCROW_WALLET}
+      # Fee percentages by provider tier (Bronze=5%, Silver=4%, Gold=3%, Platinum=2%)
+      - PLATFORM_FEE_BRONZE=${PLATFORM_FEE_BRONZE:-5}
+      - PLATFORM_FEE_SILVER=${PLATFORM_FEE_SILVER:-4}
+      - PLATFORM_FEE_GOLD=${PLATFORM_FEE_GOLD:-3}
+      - PLATFORM_FEE_PLATINUM=${PLATFORM_FEE_PLATINUM:-2}
+      - BURN_PERCENT=${BURN_PERCENT:-2}
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - dacit-network
+    restart: unless-stopped
+    profiles:
+      - marketplace
+
+  # PostgreSQL - Database for marketplace data
+  # Note: For production, use Docker secrets or external secret management
+  postgres:
+    image: postgres:15-alpine
+    container_name: dacit-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dacit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dacit}
+      POSTGRES_DB: ${POSTGRES_DB:-marketplace}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - dacit-network
+    restart: unless-stopped
+    profiles:
+      - marketplace
 
   # Landing Page Variant A
   variant-a:
@@ -153,3 +204,4 @@ networks:
 
 volumes:
   redis-data:
+  postgres-data:

@@ -171,6 +171,28 @@ Data and model insights can be purchased using DACIT tokens, fueling a marketpla
 
 Participants can deploy nodes, earn tokens for utility generation, and stake for network enhancements, creating a self-sustaining economic ecosystem where value grows with participation.
 
+8.4 Services Marketplace — SEO & Online Marketing
+
+The DACIT Services Marketplace enables token holders to trade mined tokens for professional SEO and online marketing services from verified 3rd party providers. This creates direct utility for tokens earned through mining and compute contributions.
+
+**Available Services Include:**
+
+- **SERP Tracking**: Monitor search engine rankings across keywords and competitors with daily, hourly, or real-time updates
+- **SEO Audits**: Technical audits, content analysis, and backlink profile assessments
+- **Keyword Research**: Niche research, competitor gap analysis, and content strategy
+- **Link Building**: Guest posting, premium backlinks, and outreach campaigns
+- **Content Marketing**: SEO-optimized articles, pillar content, and content calendars
+- **PPC Management**: Campaign setup, optimization, and performance reporting
+
+**Marketplace Mechanics:**
+
+- **Escrow Protection**: All transactions secured through smart contract escrow
+- **Provider Verification**: Service providers stake DACIT tokens as quality guarantee
+- **Rating System**: Verified buyer reviews ensure service quality
+- **Tiered Fee Structure**: Provider net 93-96% (based on stake tier), platform fee 2-5%, 2% token burn
+
+This services marketplace creates a closed-loop economy where miners earn tokens through compute contributions and spend them on growth services, ensuring sustainable token demand backed by real-world utility. See [`docs/marketplace.md`](marketplace.md) for full details.
+
 9. Security, Compliance & Risk Management
 
 DACIT is designed with:
