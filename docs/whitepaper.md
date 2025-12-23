@@ -209,7 +209,6 @@ By tying token value to contributions that deliver measurable outcomes, DACIT cr
 Appendices & Definitions
 
 Tokenomics Background — Tokenomics is the economic model describing how a token is created, distributed, utilized, and managed within its ecosystem, directly influencing value and viability.
-CoinTracker
 
 Solana SPL Token Standard — DACIT follows Solana Program Library standards for fungible tokens, enabling staking, governance, and micro-rewards.
 
