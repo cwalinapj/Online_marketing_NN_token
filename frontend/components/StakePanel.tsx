@@ -39,8 +39,8 @@ export default function StakePanel({ className = "" }: StakePanelProps) {
 
       // Derive PDAs for the stake state and vault
       // TODO: Replace these with actual token addresses from your deployment
-      const [stakeStatePda] = await getStakeStatePDA(wallet.publicKey);
-      const [vaultPda] = await getVaultPDA();
+      const [stakeStatePda] = getStakeStatePDA(wallet.publicKey);
+      const [vaultPda] = getVaultPDA();
       
       // TODO: Get the actual token mint address and derive ATAs
       // const userAta = await getAssociatedTokenAddress(mintAddress, wallet.publicKey);
