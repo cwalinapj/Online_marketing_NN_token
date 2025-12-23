@@ -1,0 +1,155 @@
+# DACIT Container Orchestration Configuration
+# This docker-compose.yaml deploys the conversion optimization system
+# with multiple landing page variants and the decision engine router.
+
+version: "3.9"
+
+services:
+  # Router / Decision Engine - Routes traffic to optimal variant
+  router:
+    image: nginx:alpine
+    container_name: dacit-router
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - variant-a
+      - variant-b
+      - variant-c
+      - decision-engine
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Decision Engine - Multi-Armed Bandit / ML model for variant selection
+  decision-engine:
+    build:
+      context: ./decision-engine
+      dockerfile: Dockerfile
+    container_name: dacit-decision-engine
+    ports:
+      - "8080:8080"
+    environment:
+      - EPSILON=0.1
+      - MODEL_UPDATE_INTERVAL=60
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - analytics
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Landing Page Variant A
+  variant-a:
+    build:
+      context: ./variants/variant-a
+      dockerfile: Dockerfile
+    container_name: dacit-variant-a
+    expose:
+      - "3000"
+    environment:
+      - VARIANT_ID=A
+      - ANALYTICS_URL=http://analytics:9000
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Landing Page Variant B
+  variant-b:
+    build:
+      context: ./variants/variant-b
+      dockerfile: Dockerfile
+    container_name: dacit-variant-b
+    expose:
+      - "3000"
+    environment:
+      - VARIANT_ID=B
+      - ANALYTICS_URL=http://analytics:9000
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Landing Page Variant C
+  variant-c:
+    build:
+      context: ./variants/variant-c
+      dockerfile: Dockerfile
+    container_name: dacit-variant-c
+    expose:
+      - "3000"
+    environment:
+      - VARIANT_ID=C
+      - ANALYTICS_URL=http://analytics:9000
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Real-time Analytics & Event Processing
+  analytics:
+    build:
+      context: ./analytics
+      dockerfile: Dockerfile
+    container_name: dacit-analytics
+    ports:
+      - "9000:9000"
+    environment:
+      - KAFKA_BROKERS=kafka:9092
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Redis - State store for bandit algorithm
+  redis:
+    image: redis:7-alpine
+    container_name: dacit-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Kafka - Event streaming for real-time data
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: dacit-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Zookeeper - Required for Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: dacit-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+networks:
+  dacit-network:
+    driver: bridge
+
+volumes:
+  redis-data:
