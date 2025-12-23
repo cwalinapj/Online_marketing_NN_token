@@ -39,14 +39,20 @@ export default function StakePanel({ className = "" }: StakePanelProps) {
     try {
       const program = getProgram(wallet);
 
+      // Note: In production, derive these addresses using the anchor utils:
+      // const [stakeStatePDA] = await deriveStakeStatePDA(wallet.publicKey);
+      // const [vaultPDA] = await deriveVaultPDA();
+      // Then use the SPL token library to get/create associated token accounts
+
       await program.methods
         .stakeTokens(new anchor.BN(amount))
         .accounts({
-          // Note: Replace these with actual PDA addresses
-          stakeState: new PublicKey("YOUR_STAKE_STATE_PDA"),
+          // These addresses should be derived dynamically in production
+          // See frontend/utils/anchor.ts for PDA derivation helpers
+          stakeState: wallet.publicKey, // Replace with derived PDA
           user: wallet.publicKey,
-          userTokenAccount: new PublicKey("YOUR_USER_ATA"),
-          vaultTokenAccount: new PublicKey("YOUR_VAULT_ATA"),
+          userTokenAccount: wallet.publicKey, // Replace with user's ATA
+          vaultTokenAccount: wallet.publicKey, // Replace with vault ATA
           tokenProgram: anchor.web3.TOKEN_PROGRAM_ID,
         })
         .rpc();

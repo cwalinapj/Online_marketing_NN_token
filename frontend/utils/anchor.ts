@@ -70,10 +70,10 @@ export const getProgram = (wallet: any): anchor.Program => {
  * @param userPubkey - The user's public key
  * @returns [PDA PublicKey, bump seed]
  */
-export const deriveStakeStatePDA = async (
+export const deriveStakeStatePDA = (
   userPubkey: anchor.web3.PublicKey
-): Promise<[anchor.web3.PublicKey, number]> => {
-  return await anchor.web3.PublicKey.findProgramAddressSync(
+): [anchor.web3.PublicKey, number] => {
+  return anchor.web3.PublicKey.findProgramAddressSync(
     [Buffer.from("stake_state"), userPubkey.toBuffer()],
     PROGRAM_ID
   );
@@ -86,10 +86,8 @@ export const deriveStakeStatePDA = async (
  *
  * @returns [PDA PublicKey, bump seed]
  */
-export const deriveVaultPDA = async (): Promise<
-  [anchor.web3.PublicKey, number]
-> => {
-  return await anchor.web3.PublicKey.findProgramAddressSync(
+export const deriveVaultPDA = (): [anchor.web3.PublicKey, number] => {
+  return anchor.web3.PublicKey.findProgramAddressSync(
     [Buffer.from("vault")],
     PROGRAM_ID
   );
