@@ -1,3 +1,5 @@
+# Emission Schedule Overview
+
 📌 What Is an Emission Schedule?
 
 An emission schedule controls how many tokens are released as rewards over time, based on time or activity. It’s often used to:

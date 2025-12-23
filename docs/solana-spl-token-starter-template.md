@@ -1,3 +1,5 @@
+# Solana SPL Token Smart Contract Starter (Rust)
+
 Purpose: Demonstrates how to initialize a token mint, mint tokens, and transfer tokens using Rust and Solana’s SPL Token program.
 
 This is not a full production contract (e.g., no error handling or checks yet) — but it gives you the core Rust code structure you need to build your token program.

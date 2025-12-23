@@ -1,3 +1,5 @@
+# Charting Containers with ApexCharts
+
 1) Using React-ApexCharts for Line/Area Charts
 
 ApexCharts is a popular charting library with a React wrapper — perfect for complex trend charts like conversion over time. 
