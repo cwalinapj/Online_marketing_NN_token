@@ -1,0 +1,17 @@
+[workspace]
+members = [
+  "programs/dacit_program"
+]
+
+[programs.localnet]
+dacit_program = "INSERT_YOUR_PROGRAM_ID_HERE"
+
+[registry]
+url = "https://api.devnet.solana.com"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "anchor test"
