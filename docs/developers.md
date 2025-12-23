@@ -5,6 +5,7 @@ This repository is a collection of reference documents and implementation notes 
 
 ## Architecture Highlights
 - **Edge nodes:** Host containerized web experiences and collect telemetry.
+- **Nodal network:** True distributed webhosting with marketing intelligence capabilities.
 - **Optimization layer:** AI models adjust UI/UX in real time to improve conversion.
 - **Solana integration:** SPL token contracts and Anchor programs handle rewards and governance.
 

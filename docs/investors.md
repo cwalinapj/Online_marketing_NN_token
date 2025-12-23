@@ -35,6 +35,7 @@ Tokens are used for:
 
 ## Additional Reading
 - Full whitepaper: [`docs/whitepaper.md`](whitepaper.md)
+- Nodal network & marketing intelligence: [`docs/nodal-network-webhosting.md`](nodal-network-webhosting.md)
 - Real-time optimization: [`docs/no-more-split-testing.md`](no-more-split-testing.md)
 - Routing & optimization approach: [`docs/real-time-routing-optimization.md`](real-time-routing-optimization.md)
 - Token emissions primer: [`docs/emission-schedule.md`](emission-schedule.md)

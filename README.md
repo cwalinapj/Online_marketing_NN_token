@@ -12,6 +12,7 @@ DACIT is a decentralized infrastructure concept that combines edge compute, AI-d
 
 ### Product & Strategy
 - [Whitepaper](docs/whitepaper.md)
+- [Nodal Network for Webhosting & Marketing Intelligence](docs/nodal-network-webhosting.md)
 - [No More Split Testing (Real-Time Optimization)](docs/no-more-split-testing.md)
 - [Real-Time Routing & Optimization](docs/real-time-routing-optimization.md)
 - [Emission Schedule Primer](docs/emission-schedule.md)
