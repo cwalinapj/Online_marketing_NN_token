@@ -9,9 +9,13 @@ Online_marketing_NN_token/
 ├── DEVELOPERS_GUIDE.md          # Developer conventions and guidelines
 ├── README.md                    # This file (project overview & whitepaper)
 ├── docs/                        # Documentation
+│   ├── ai-creative-studio.md    # AI video/image generation & token burns
+│   ├── api-integrations.md      # 50+ API integrations for LAM data
 │   ├── conversion-optimization-metrics.md
+│   ├── edge-box-ad-manager.md   # On-device ad management & AI optimization
 │   ├── emission-schedule.md
 │   ├── real-time-optimization.md
+│   ├── tokenomics.md            # Comprehensive token economics
 │   └── ui-design.md
 ├── contracts/                   # Smart contracts
 │   └── anchor/                  # Solana/Anchor program
@@ -37,6 +41,15 @@ Online_marketing_NN_token/
 2. **Frontend**: See [`frontend/`](./frontend/) for React/TypeScript components
 3. **Documentation**: See [`docs/`](./docs/) for detailed guides
 4. **Developer Guide**: See [`DEVELOPERS_GUIDE.md`](./DEVELOPERS_GUIDE.md) for conventions
+
+## Key Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Tokenomics](./docs/tokenomics.md) | Token supply, distribution, staking, and burn mechanics |
+| [API Integrations](./docs/api-integrations.md) | 50+ APIs including Firecrawl for competitor monitoring |
+| [Edge Box Ad Manager](./docs/edge-box-ad-manager.md) | On-screen ad management with AI optimization |
+| [AI Creative Studio](./docs/ai-creative-studio.md) | Video/image generation with token burn model |
 
 ## Technology Stack
 
