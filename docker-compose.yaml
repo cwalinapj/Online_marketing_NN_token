@@ -44,6 +44,7 @@ services:
     restart: unless-stopped
 
   # Services Marketplace - 3rd party SEO/marketing services marketplace
+  # Note: Requires ./marketplace directory with Dockerfile to be implemented
   marketplace:
     build:
       context: ./marketplace

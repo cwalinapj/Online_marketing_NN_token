@@ -189,7 +189,7 @@ The DACIT Services Marketplace enables token holders to trade mined tokens for p
 - **Escrow Protection**: All transactions secured through smart contract escrow
 - **Provider Verification**: Service providers stake DACIT tokens as quality guarantee
 - **Rating System**: Verified buyer reviews ensure service quality
-- **Fee Structure**: 95% to provider, 3% platform fee, 2% token burn
+- **Tiered Fee Structure**: Provider net 93-96% (based on stake tier), platform fee 2-5%, 2% token burn
 
 This services marketplace creates a closed-loop economy where miners earn tokens through compute contributions and spend them on growth services, ensuring sustainable token demand backed by real-world utility. See [`docs/marketplace.md`](marketplace.md) for full details.
 

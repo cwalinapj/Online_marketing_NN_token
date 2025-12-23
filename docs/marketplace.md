@@ -131,8 +131,8 @@ Pay-per-click campaign management.
 ┌─────────────────┐
 │                 │
 │  Settlement:    │
-│  - 95% Provider │
-│  - 3% Platform  │
+│  - 93-96% Provider (based on tier) │
+│  - 2-5% Platform (based on tier)   │
 │  - 2% Burn      │
 │                 │
 └─────────────────┘
@@ -148,12 +148,16 @@ Pay-per-click campaign management.
 
 ### Provider Tiers
 
-| Tier | Stake Required | Commission | Benefits |
-|------|----------------|------------|----------|
-| Bronze | 500 DACIT | 5% | Basic listing |
-| Silver | 2,000 DACIT | 4% | Featured placement, badges |
-| Gold | 5,000 DACIT | 3% | Priority support, analytics |
-| Platinum | 10,000 DACIT | 2% | All benefits, early access |
+Higher-tier providers receive reduced platform fees as a reward for their stake commitment:
+
+| Tier | Stake Required | Platform Fee | Provider Net | Benefits |
+|------|----------------|--------------|--------------|----------|
+| Bronze | 500 DACIT | 5% | 93%* | Basic listing |
+| Silver | 2,000 DACIT | 4% | 94%* | Featured placement, badges |
+| Gold | 5,000 DACIT | 3% | 95%* | Priority support, analytics |
+| Platinum | 10,000 DACIT | 2% | 96%* | All benefits, early access |
+
+*Provider net = 100% - Platform Fee - 2% token burn
 
 ### Service Quality Assurance
 - **Rating System**: 5-star ratings from verified buyers
@@ -313,11 +317,13 @@ interface MarketplaceAPI {
 ## Governance & Fees
 
 ### Fee Structure
-| Fee Type | Percentage | Recipient |
-|----------|------------|-----------|
-| Platform Fee | 3% | Treasury |
-| Token Burn | 2% | Burn Address |
-| Provider Net | 95% | Service Provider |
+Base fees apply to Bronze tier providers. Higher tiers receive reduced platform fees.
+
+| Fee Type | Bronze | Silver | Gold | Platinum | Recipient |
+|----------|--------|--------|------|----------|-----------|
+| Platform Fee | 5% | 4% | 3% | 2% | Treasury |
+| Token Burn | 2% | 2% | 2% | 2% | Burn Address |
+| Provider Net | 93% | 94% | 95% | 96% | Service Provider |
 
 ### Governance Parameters
 Token holders can vote on:
