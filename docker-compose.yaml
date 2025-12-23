@@ -1,6 +1,6 @@
 # DACIT Container Orchestration Configuration
 # This docker-compose.yaml deploys the conversion optimization system
-# with multiple landing page variants and the decision engine router.
+# with multiple landing page variants, the decision engine router, and the services marketplace.
 
 version: "3.9"
 
@@ -19,6 +19,7 @@ services:
       - variant-b
       - variant-c
       - decision-engine
+      - marketplace
     networks:
       - dacit-network
     restart: unless-stopped
@@ -38,6 +39,46 @@ services:
     depends_on:
       - redis
       - analytics
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # Services Marketplace - 3rd party SEO/marketing services marketplace
+  marketplace:
+    build:
+      context: ./marketplace
+      dockerfile: Dockerfile
+    container_name: dacit-marketplace
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://dacit:dacit@postgres:5432/marketplace
+      - REDIS_URL=redis://redis:6379
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.devnet.solana.com}
+      - MARKETPLACE_PROGRAM_ID=${MARKETPLACE_PROGRAM_ID}
+      - ESCROW_WALLET=${ESCROW_WALLET}
+      - PLATFORM_FEE_PERCENT=3
+      - BURN_PERCENT=2
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - dacit-network
+    restart: unless-stopped
+
+  # PostgreSQL - Database for marketplace data
+  postgres:
+    image: postgres:15-alpine
+    container_name: dacit-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dacit
+      POSTGRES_PASSWORD: dacit
+      POSTGRES_DB: marketplace
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - dacit-network
     restart: unless-stopped
@@ -153,3 +194,4 @@ networks:
 
 volumes:
   redis-data:
+  postgres-data:

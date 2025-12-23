@@ -21,6 +21,9 @@ This repository is a collection of reference documents and implementation notes 
 - [SPL Token CPI Minting](spl-token-cpi-minting.md)
 - [SPL Token Starter Template](solana-spl-token-starter-template.md)
 
+### Marketplace
+- [Services Marketplace](marketplace.md) — 3rd party marketplace for trading tokens for SEO/marketing services
+
 ### Frontend & UI
 - [Next.js + Solana UI Template](nextjs-solana-ui.md)
 - [React + TypeScript Frontend](react-typescript-frontend.md)

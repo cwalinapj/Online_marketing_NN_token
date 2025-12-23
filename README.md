@@ -15,6 +15,7 @@ DACIT is a decentralized infrastructure concept that combines edge compute, AI-d
 - [No More Split Testing (Real-Time Optimization)](docs/no-more-split-testing.md)
 - [Real-Time Routing & Optimization](docs/real-time-routing-optimization.md)
 - [Emission Schedule Primer](docs/emission-schedule.md)
+- [Services Marketplace](docs/marketplace.md) — Trade tokens for SEO/marketing services
 
 ### Solana & Anchor Development
 - [Anchor Project Overview](docs/anchor-project.md)

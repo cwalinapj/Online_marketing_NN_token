@@ -26,6 +26,17 @@ Tokens are used for:
 - Enables a marketplace for AI-driven optimization insights.
 - Encourages a decentralized contribution economy with clear reward signals.
 
+## Services Marketplace
+DACIT includes a 3rd party services marketplace where token holders can trade mined tokens for professional SEO and online marketing services:
+- **SERP Tracking**: Monitor search rankings with daily/hourly/real-time updates
+- **SEO Audits**: Technical, content, and backlink analysis
+- **Keyword Research**: Niche research and competitor gap analysis
+- **Link Building**: Guest posting and premium backlink acquisition
+- **Content Marketing**: SEO-optimized content creation
+- **PPC Management**: Campaign setup and optimization
+
+This marketplace creates direct utility for mined tokens and sustainable demand through real-world service delivery. Full details: [`docs/marketplace.md`](marketplace.md)
+
 ## Roadmap (High-Level)
 - **Q1 2026:** Protocol specification & token launch
 - **Q2 2026:** Testnet deployment & reward algorithm release
