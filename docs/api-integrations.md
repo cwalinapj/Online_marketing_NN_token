@@ -1,6 +1,6 @@
 # API Integrations
 
-The DACIT edge node supports **50+ API integrations** to provide the Large Action Model (LAM) with comprehensive data points for real-time conversion optimization.
+The DACIT edge node supports **60+ API integrations** to provide the Large Action Model (LAM) with comprehensive data points for real-time conversion optimization.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ The DACIT edge node supports **50+ API integrations** to provide the Large Actio
 
 ## Overview
 
-The DACIT box connects to 50+ external APIs to gather rich, multi-dimensional data that feeds into the Large Action Model (LAM). This data enables:
+The DACIT box connects to 60+ external APIs to gather rich, multi-dimensional data that feeds into the Large Action Model (LAM). This data enables:
 
 - **Real-time personalization** based on user behavior across platforms
 - **Cross-channel attribution** for accurate conversion tracking
@@ -328,7 +328,7 @@ All competitor monitoring adheres to:
 
 ### How the LAM Uses API Data
 
-The Large Action Model processes data from all 54 integrations to make real-time optimization decisions:
+The Large Action Model processes data from all 60 integrations to make real-time optimization decisions:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -430,7 +430,7 @@ LAM Decision (< 50ms):
 
 ## Summary
 
-The DACIT box's 54 API integrations provide the LAM with:
+The DACIT box's 60 API integrations provide the LAM with:
 
 - ✅ **500+ unique data points** per user interaction
 - ✅ **Cross-channel visibility** across marketing, sales, and support

@@ -283,7 +283,7 @@ The DACIT economic model creates a self-reinforcing cycle:
 
 | Mechanism | Impact | Activation |
 |-----------|--------|------------|
-| Emission Halving | Reduces new supply by 25% annually | Automatic |
+| Annual Emission Reduction | Reduces new supply by 25% each year | Automatic |
 | Transaction Burns | Removes 0.5-2% of daily volume | Per transaction |
 | Slashing Burns | Removes misbehaving stake | On violation |
 | Treasury Burns | Removes unused allocations | After 5 years |
