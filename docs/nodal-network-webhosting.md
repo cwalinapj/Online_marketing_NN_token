@@ -195,8 +195,22 @@ Nodes can participate in SERP analysis by:
 # Example: Node SERP query contribution
 class SerpNode:
     def __init__(self, location):
-        self.location = location  # Approximate location (zip code level, never precise GPS)
+        # Enforce approximate location usage (zip/city-level, never precise GPS)
+        self.location = self._sanitize_location(location)
         self.zip_code = self.derive_zip_code()
+    
+    def _sanitize_location(self, location):
+        """
+        Ensure that precise GPS coordinates are not accepted.
+        This example rejects obvious (lat, lon) inputs and expects
+        callers to provide zip code or city-level location data.
+        """
+        # Reject tuple/list pairs that likely represent (lat, lon)
+        if isinstance(location, (tuple, list)) and len(location) == 2:
+            raise ValueError(
+                "Precise GPS coordinates are not accepted; provide a zip code or city-level location."
+            )
+        return location
     
     def execute_serp_query(self, keyword, search_engine='google'):
         """
