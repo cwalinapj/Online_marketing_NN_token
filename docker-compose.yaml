@@ -59,8 +59,12 @@ services:
       - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.devnet.solana.com}
       - MARKETPLACE_PROGRAM_ID=${MARKETPLACE_PROGRAM_ID}
       - ESCROW_WALLET=${ESCROW_WALLET}
-      - PLATFORM_FEE_PERCENT=3
-      - BURN_PERCENT=2
+      # Fee percentages by provider tier (Bronze=5%, Silver=4%, Gold=3%, Platinum=2%)
+      - PLATFORM_FEE_BRONZE=${PLATFORM_FEE_BRONZE:-5}
+      - PLATFORM_FEE_SILVER=${PLATFORM_FEE_SILVER:-4}
+      - PLATFORM_FEE_GOLD=${PLATFORM_FEE_GOLD:-3}
+      - PLATFORM_FEE_PLATINUM=${PLATFORM_FEE_PLATINUM:-2}
+      - BURN_PERCENT=${BURN_PERCENT:-2}
     depends_on:
       - redis
       - postgres
