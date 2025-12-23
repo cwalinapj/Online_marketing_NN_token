@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import * as anchor from "@coral-xyz/anchor";
-import { getProgram } from "../utils/anchor";
+import { getProgram, getStakeStatePDA, getVaultPDA } from "../utils/anchor";
 
 interface StakePanelProps {
   className?: string;
@@ -12,6 +12,11 @@ interface StakePanelProps {
 /**
  * StakePanel component allows users to stake DACIT tokens.
  * Connects to the Anchor program and submits stake transactions.
+ * 
+ * NOTE: This is a template component. Before using in production:
+ * 1. Ensure the Anchor program is deployed
+ * 2. Configure the IDL in frontend/utils/anchor.ts
+ * 3. Set up proper token mint and ATA addresses
  */
 export default function StakePanel({ className = "" }: StakePanelProps) {
   const { connection } = useConnection();
@@ -32,14 +37,23 @@ export default function StakePanel({ className = "" }: StakePanelProps) {
     try {
       const program = getProgram(wallet);
 
-      // Note: Replace placeholder addresses with actual PDAs
+      // Derive PDAs for the stake state and vault
+      // TODO: Replace these with actual token addresses from your deployment
+      const [stakeStatePda] = await getStakeStatePDA(wallet.publicKey);
+      const [vaultPda] = await getVaultPDA();
+      
+      // TODO: Get the actual token mint address and derive ATAs
+      // const userAta = await getAssociatedTokenAddress(mintAddress, wallet.publicKey);
+      // const vaultAta = await getAssociatedTokenAddress(mintAddress, vaultPda, true);
+
       await program.methods
         .stakeTokens(new anchor.BN(amount))
         .accounts({
-          stakeState: /* PDA stake state address */,
+          stakeState: stakeStatePda,
           user: wallet.publicKey,
-          userTokenAccount: /* User's token ATA */,
-          vaultTokenAccount: /* Program vault ATA */,
+          // TODO: Replace with actual ATA addresses
+          userTokenAccount: wallet.publicKey, // Placeholder
+          vaultTokenAccount: vaultPda,        // Placeholder
           tokenProgram: anchor.web3.TOKEN_PROGRAM_ID,
         })
         .rpc();

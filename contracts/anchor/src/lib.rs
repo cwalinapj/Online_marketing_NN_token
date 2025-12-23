@@ -7,6 +7,12 @@
 //! - Staking mechanism
 //! - Reward distribution with emission schedule
 //! - Conversion metrics recording
+//!
+//! NOTE: This is a template implementation. Before deployment:
+//! - Replace the program ID with your deployed program address
+//! - Customize reward calculations for your specific use case
+//! - Add proper error handling and security checks
+//! - Audit the code thoroughly
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, MintTo, Token, TokenAccount, Transfer};
@@ -63,6 +69,7 @@ pub mod dacit_program {
     }
 
     /// Claim rewards based on emission schedule
+    /// NOTE: In production, use PDA-signed CPI for secure minting
     pub fn claim_rewards(ctx: Context<ClaimRewards>) -> Result<()> {
         let now = Clock::get()?.unix_timestamp;
 
@@ -74,14 +81,21 @@ pub mod dacit_program {
         let stake_amount = ctx.accounts.stake_state.amount;
         let reward = rate.checked_mul(stake_amount).unwrap_or(0);
 
-        // Mint reward tokens
+        // Mint reward tokens using PDA authority
+        // The mint_authority PDA is derived from ["mint-authority"] seeds
+        let seeds = &[b"mint-authority".as_ref(), &[ctx.accounts.mint_authority_bump]];
+        let signer_seeds = &[&seeds[..]];
+        
         let cpi_accounts = MintTo {
             mint: ctx.accounts.mint.to_account_info(),
             to: ctx.accounts.user_token_account.to_account_info(),
             authority: ctx.accounts.mint_authority.to_account_info(),
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();
-        token::mint_to(CpiContext::new(cpi_program, cpi_accounts), reward)?;
+        token::mint_to(
+            CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds),
+            reward,
+        )?;
 
         // Update stake state timestamp
         ctx.accounts.stake_state.last_stake_time = now;
@@ -91,6 +105,7 @@ pub mod dacit_program {
     }
 
     /// Unstake tokens and claim pending rewards
+    /// NOTE: In production, use PDA-signed CPI for secure operations
     pub fn unstake_tokens(ctx: Context<UnstakeTokens>) -> Result<()> {
         let now = Clock::get()?.unix_timestamp;
 
@@ -100,25 +115,39 @@ pub mod dacit_program {
         let stake_amount = ctx.accounts.stake_state.amount;
         let reward = rate.checked_mul(stake_amount).unwrap_or(0);
 
-        // Mint rewards
+        // Mint rewards using PDA authority
+        let mint_seeds = &[b"mint-authority".as_ref(), &[ctx.accounts.mint_authority_bump]];
+        let mint_signer = &[&mint_seeds[..]];
+        
         let mint_cpi = MintTo {
             mint: ctx.accounts.mint.to_account_info(),
             to: ctx.accounts.user_token_account.to_account_info(),
             authority: ctx.accounts.mint_authority.to_account_info(),
         };
         token::mint_to(
-            CpiContext::new(ctx.accounts.token_program.to_account_info(), mint_cpi),
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                mint_cpi,
+                mint_signer,
+            ),
             reward,
         )?;
 
-        // Transfer stake back to user
+        // Transfer stake back using vault PDA authority
+        let vault_seeds = &[b"vault-authority".as_ref(), &[ctx.accounts.vault_authority_bump]];
+        let vault_signer = &[&vault_seeds[..]];
+        
         let transfer_cpi = Transfer {
             from: ctx.accounts.vault_token_account.to_account_info(),
             to: ctx.accounts.user_token_account.to_account_info(),
             authority: ctx.accounts.vault_authority.to_account_info(),
         };
         token::transfer(
-            CpiContext::new(ctx.accounts.token_program.to_account_info(), transfer_cpi),
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                transfer_cpi,
+                vault_signer,
+            ),
             stake_amount,
         )?;
 
@@ -260,8 +289,15 @@ pub struct ClaimRewards<'info> {
     pub mint: Account<'info, Mint>,
     #[account(mut)]
     pub user_token_account: Account<'info, TokenAccount>,
-    /// CHECK: Mint authority for reward tokens
+    /// CHECK: PDA authority for minting reward tokens
+    /// Derived from seeds: ["mint-authority"]
+    #[account(
+        seeds = [b"mint-authority"],
+        bump
+    )]
     pub mint_authority: AccountInfo<'info>,
+    /// Bump seed for the mint authority PDA
+    pub mint_authority_bump: u8,
     pub token_program: Program<'info, Token>,
 }
 
@@ -279,10 +315,24 @@ pub struct UnstakeTokens<'info> {
     pub user_token_account: Account<'info, TokenAccount>,
     #[account(mut)]
     pub vault_token_account: Account<'info, TokenAccount>,
-    /// CHECK: Mint authority for reward tokens
+    /// CHECK: PDA authority for minting reward tokens
+    /// Derived from seeds: ["mint-authority"]
+    #[account(
+        seeds = [b"mint-authority"],
+        bump
+    )]
     pub mint_authority: AccountInfo<'info>,
-    /// CHECK: Vault authority for token transfers
+    /// Bump seed for the mint authority PDA
+    pub mint_authority_bump: u8,
+    /// CHECK: PDA authority for vault token transfers
+    /// Derived from seeds: ["vault-authority"]
+    #[account(
+        seeds = [b"vault-authority"],
+        bump
+    )]
     pub vault_authority: AccountInfo<'info>,
+    /// Bump seed for the vault authority PDA
+    pub vault_authority_bump: u8,
     pub token_program: Program<'info, Token>,
 }
 
