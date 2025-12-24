@@ -1,3 +1,5 @@
+# React Components: Conversion Metrics Dashboard
+
 Here are full React + Tailwind UI component implementations for your Conversion Optimization Metrics dashboard — built as reusable components you can drop into your Next.js/Tailwind project. These components cover:
 
 ✅ KPI Metric Cards

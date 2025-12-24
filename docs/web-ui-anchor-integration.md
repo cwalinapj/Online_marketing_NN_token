@@ -1,4 +1,6 @@
-eb UI: Connecting React/Next.js to Your Anchor Program (Stake/Reward)
+# Web UI: Anchor Integration
+
+Web UI: Connecting React/Next.js to Your Anchor Program (Stake/Reward)
 
 This UI approach includes:
 

@@ -1,0 +1,14 @@
+[project]
+name = "dacit-docs"
+version = "0.1.0"
+description = "CLI helpers for navigating DACIT documentation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+
+[project.scripts]
+dacit-docs = "dacit.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

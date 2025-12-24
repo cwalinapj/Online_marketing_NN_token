@@ -1,3 +1,5 @@
+# SPL Token Minting via CPI
+
 1) SPL Token Minting via CPI (Cross-Program Invocation)
 
 Solana programs don’t mint tokens directly — they call the SPL Token Program (via CPI) to mint tokens to an account. Anchor provides helpers for this.

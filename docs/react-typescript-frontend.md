@@ -1,3 +1,5 @@
+# React + TypeScript Frontend (Vite + Solana)
+
 React (with Vite)
 ✅ TypeScript
 ✅ @solana/wallet-adapter (supports Phantom, etc.)

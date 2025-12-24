@@ -1,4 +1,6 @@
-ere’s how real-time conversion optimization by dynamically changing containers or page variants actually works — from user tracking and decision logic to machine-learning-driven routing — and how you could implement it in the kind of system you’re building.
+# Real-Time Routing & Optimization
+
+Here’s how real-time conversion optimization by dynamically changing containers or page variants actually works — from user tracking and decision logic to machine-learning-driven routing — and how you could implement it in the kind of system you’re building.
 
 🧠 1) Why Traditional A/B Testing Isn’t Enough for Real-Time Optimization
 
