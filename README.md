@@ -67,7 +67,7 @@ Online_marketing_NN_token/
 
 ## 1. Executive Summary
 
-The Decentralized Autonomous Compute & Intelligence Token (DACIT) introduces a new paradigm in decentralized infrastructure networks by combining autonomous AI-driven web presence optimization, edge compute nodes, and token-based economic incentives on the Solana blockchain. DACIT is designed to reward the real production of utility — not speculative trading — by aligning token value with:
+## Start Here
 
 - ✔ Edge compute and container hosting contributions
 - ✔ Autonomous AI optimization of user conversion experiences
@@ -78,7 +78,11 @@ The DACIT token creates a self-reinforcing economic loop where network participa
 
 ## 2. Problem Statement
 
-In the current web and AI ecosystem:
+### Solana & Anchor Development
+- [Anchor Project Overview](docs/anchor-project.md)
+- [Anchor Project Structure](docs/anchor-project-structure.md)
+- [SPL Token CPI Minting](docs/spl-token-cpi-minting.md)
+- [SPL Token Starter Template](docs/solana-spl-token-starter-template.md)
 
 - Conventional websites are static, requiring manual updates and A/B testing cycles that lag true user behavior.
 - Cloud providers centralize compute and are costly for distributed interface hosting.
